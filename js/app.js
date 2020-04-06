@@ -4,6 +4,7 @@ const asunto = document.getElementById('asunto')
 const mensaje = document.getElementById('mensaje')
 const btnEnviar = document.getElementById('enviar')
 const formularioEnviar = document.getElementById('enviar-mail')
+const resetBtn = document.getElementById('resetBtn')
 
 // Event Listeners
 eventListeners()
@@ -19,6 +20,9 @@ function eventListeners() {
 
     // Botón de enviar en el submit
     btnEnviar.addEventListener('click', enviarEmail)
+
+    // Botón de reset
+    resetBtn.addEventListener('click', resetFormulario)
 }
 
 // Funciones
@@ -44,6 +48,13 @@ function validarCampo() {
             btnEnviar.disabled = false;    
         }
     }
+}
+
+// Resetear el formulario
+
+function resetFormulario(e) {
+    formularioEnviar.reset();
+    e.preventDefault();
 }
 
 // Cuando se envia el correo
