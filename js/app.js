@@ -3,6 +3,7 @@ const email = document.getElementById('email')
 const asunto = document.getElementById('asunto')
 const mensaje = document.getElementById('mensaje')
 const btnEnviar = document.getElementById('enviar')
+const formularioEnviar = document.getElementById('enviar-mail')
 
 // Event Listeners
 eventListeners()
@@ -15,6 +16,9 @@ function eventListeners() {
     email.addEventListener('blur', validarCampo)
     asunto.addEventListener('blur', validarCampo)
     mensaje.addEventListener('blur', validarCampo)
+
+    // Botón de enviar en el submit
+    btnEnviar.addEventListener('click', enviarEmail)
 }
 
 // Funciones
@@ -24,8 +28,13 @@ function inicioApp() {
 }
 
 function validarCampo() {
-    // Se valida la longitud del texto y que no esté vacío
+    // Valida los campos
     validarLongitud(this)
+
+    // Validar unicamente el @ del email
+    if (this.type === 'email') {
+        validarEmail(this);
+    }
 
     let errores = document.querySelectorAll('.error')
 
@@ -37,8 +46,46 @@ function validarCampo() {
     }
 }
 
+// Cuando se envia el correo
+function enviarEmail(e) {
+    // Spinner al presionar enviar
+    const spinnerGif = document.querySelector('#spinner');
+    spinnerGif.style.display = 'block';
+
+    // Gif de email enviado
+    const enviado = document.createElement('img');
+    enviado.src = 'img/mail.gif';
+    enviado.style.display = 'block';
+
+    // Ejecutar spinner y mostrar gif enviado
+    setTimeout(function () {
+        spinnerGif.style.display = 'none';
+
+        document.querySelector('#loaders').appendChild( enviado );
+
+        setTimeout(function () {
+            enviado.remove();
+            formularioEnviar.reset();
+        }, 5000)
+    }, 3000)
+
+    e.preventDefault()
+}
+
+// Verifica la longitud del texto en los campos
 function validarLongitud(campo) {
     if (campo.value.length > 0) {
+        campo.style.borderBottomColor = 'green';
+        campo.classList.remove('error');
+    } else {
+        campo.style.borderBottomColor = 'red';
+        campo.classList.add('error');
+    }
+}
+
+function validarEmail(campo) { 
+    const mensaje = campo.value;
+    if (mensaje.indexOf('@') !== -1 ) {
         campo.style.borderBottomColor = 'green';
         campo.classList.remove('error');
     } else {
